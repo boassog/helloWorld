@@ -5,24 +5,44 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
+  ListView,
 } from 'react-native';
 
 import {
   Actions,
 } from 'react-native-router-flux';
 
+import api from '../utilities/api';
+
 class Home extends React.Component{
+
+  constructor(props){
+    super(props);
+    this.state = {
+      movies: [],
+    }
+  }
+
+  componentWillMount(){
+    api.getMovies().then((res) => {
+      this.setState({
+        movies: res.movies
+      })
+    });
+  }
+
   render(){
+    if(this.state.movies){
+        console.log("movies: ", this.state.movies);
+    }
     return(
       <View style={styles.container}>
         <Text>
           Hello Home
         </Text>
-        <TouchableOpacity
-          onPress={() => {
+        <TouchableOpacity onPress={() => {
             Actions.detail();
-          }}
-        >
+          }}>
           <Text style={styles.buttonNext}>
             Go to Detail
           </Text>
