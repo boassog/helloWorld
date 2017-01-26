@@ -43,6 +43,7 @@ class Home extends React.Component{
           dataSource={this.state.dataSource}
           renderRow={this.renderRow.bind(this)}
           enableEmptySections={true}
+          renderSeparator={(sectionId, rowId) => <View key={rowId} style={styles.separator} />}
          />
       </View>
     )
@@ -73,9 +74,13 @@ const styles = StyleSheet.create({
   buttonNext: {
     fontSize: 20,
     textAlign: 'center',
-    color: 'white',
+    color: 'gray',
     padding: 20,
-    backgroundColor: '#999',
+  },
+  separator: {
+    flex: 1,
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: '#EAEAEA',
   },
 });
 
