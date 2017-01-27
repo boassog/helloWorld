@@ -14,8 +14,6 @@ import {
 
 import api from '../utilities/api';
 
-var DATA =[];
-
 class Home extends React.Component{
 
   constructor(props){
@@ -24,14 +22,28 @@ class Home extends React.Component{
       rowHasChanged: (r1, r2) => r1 !== r2
     });
     this.state = {
-      dataSource: ds.cloneWithRows(DATA),
+      myArray: [],
+      dataSource: ds.cloneWithRows([]),
+
+      champion: {},
     }
   }
 
   componentWillMount(){
-    api.getMovies().then((res) => {
+    console.log('GET Match')
+    api.getMatchs().then((res) => {
+      console.log('GET Champ')
+      const resChamp = res.champions.map((item, i) => {
+        return api.getChampionById(item.id).then((result) => {
+          // console.log('champ: ',result);
+          this.setState({
+            // champion: res,
+            myArray: [this.state.myArray, result],
+          })
+        })
+      })
       this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(res.champions),
+        dataSource: this.state.dataSource.cloneWithRows(this.state.myArray),
       })
     });
   }
@@ -50,13 +62,20 @@ class Home extends React.Component{
   }
 
   renderRow(data) {
+    // api.getChampionSquare(data.id).then((res) => {
+    //   // console.log('champ: ',res);
+    //   this.setState({
+    //     champion: res,
+    //   })
+    // });
+    // console.log('ITEM: ',data);
     return (
       <View>
         <TouchableOpacity onPress={() => {
             Actions.detail();
           }}>
           <Text style={styles.buttonNext}>
-            {data.id}
+            {data.name}
           </Text>
         </TouchableOpacity>
       </View>
