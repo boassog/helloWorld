@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ListView,
+  Image,
 } from 'react-native';
 
 import {
@@ -23,9 +24,7 @@ class Home extends React.Component{
     });
     this.state = {
       myArray: [],
-      dataSource: ds.cloneWithRows([]),
-
-      champion: {},
+      dataSource: ds.cloneWithRows([])
     }
   }
 
@@ -33,17 +32,13 @@ class Home extends React.Component{
     console.log('GET Match')
     api.getMatchs().then((res) => {
       console.log('GET Champ')
-      const resChamp = res.champions.map((item, i) => {
-        return api.getChampionById(item.id).then((result) => {
-          // console.log('champ: ',result);
+      const resChamp = res.matches.map((item, i) => {
+        api.getChampionById(item.champion).then((result) => {
           this.setState({
-            // champion: res,
-            myArray: [this.state.myArray, result],
+            myArray: this.state.myArray.concat([result]),
+            dataSource: this.state.dataSource.cloneWithRows(this.state.myArray)
           })
         })
-      })
-      this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(this.state.myArray),
       })
     });
   }
@@ -62,18 +57,12 @@ class Home extends React.Component{
   }
 
   renderRow(data) {
-    // api.getChampionSquare(data.id).then((res) => {
-    //   // console.log('champ: ',res);
-    //   this.setState({
-    //     champion: res,
-    //   })
-    // });
-    // console.log('ITEM: ',data);
     return (
       <View>
         <TouchableOpacity onPress={() => {
-            Actions.detail();
+            // Actions.detail();
           }}>
+          <Image source={{ uri: 'https://facebook.github.io/react/img/logo_og.png'}} style={styles.photo} />
           <Text style={styles.buttonNext}>
             {data.name}
           </Text>
@@ -83,6 +72,8 @@ class Home extends React.Component{
   }
 }
 
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -91,10 +82,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF',
   },
   buttonNext: {
-    fontSize: 20,
+    fontSize: 16,
     textAlign: 'center',
     color: 'gray',
     padding: 20,
+  },
+  photo: {
+    width: 50,
+    height: 50,
   },
   separator: {
     flex: 1,
