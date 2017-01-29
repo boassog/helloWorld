@@ -45,7 +45,7 @@ class Home extends React.Component{
 
   render(){
     return(
-      <View style={styles.container}>
+      <View>
         <ListView
           dataSource={this.state.dataSource}
           renderRow={this.renderRow.bind(this)}
@@ -58,14 +58,19 @@ class Home extends React.Component{
 
   renderRow(data) {
     return (
-      <View>
+      <View style={styles.container}>
         <TouchableOpacity onPress={() => {
             // Actions.detail();
-          }}>
+          }} style={styles.row}>
           <Image source={{ uri: 'https://facebook.github.io/react/img/logo_og.png'}} style={styles.photo} />
-          <Text style={styles.buttonNext}>
-            {data.name}
-          </Text>
+          <View style={{paddingLeft:10}}>
+            <Text style={styles.title}>
+              {data.name}
+            </Text>
+            <Text>
+            {data.title}
+            </Text>
+          </View>
         </TouchableOpacity>
       </View>
     )
@@ -77,15 +82,18 @@ class Home extends React.Component{
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    // justifyContent: 'center',
     // alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
-  buttonNext: {
+  row: {
+    padding: 8,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  title: {
     fontSize: 16,
-    textAlign: 'center',
-    color: 'gray',
-    padding: 20,
+    fontWeight: 'bold',
   },
   photo: {
     width: 50,
